@@ -1,0 +1,60 @@
+SELECT COUNT(product_id) AS TotalProductsAvailable
+FROM Products;
+
+
+SELECT ROUND(AVG(price), 2) AS AverageProductPrice
+FROM Products;
+
+
+SELECT SUM(stock_quantity) AS TotalInventoryStock
+FROM Products;
+
+
+SELECT
+    COUNT(order_id) AS TotalOrdersPlaced,
+    SUM(total_amount) AS TotalRevenue
+FROM Orders;
+
+
+SELECT
+    CASE
+        WHEN price < 50.00 THEN '< $50'
+        WHEN price >= 50.00 AND price <= 100.00 THEN '$50 - $100'
+        ELSE '> $100'
+    END AS PriceRange,
+    COUNT(product_id) AS NumberOfProducts
+FROM Products
+GROUP BY PriceRange
+ORDER BY PriceRange; 
+
+
+SELECT
+    customer_id,
+    COUNT(order_id) AS NumberOfOrders
+FROM Orders
+GROUP BY customer_id
+HAVING COUNT(order_id) > 1
+ORDER BY NumberOfOrders DESC;
+
+SELECT
+    product_id,
+    AVG(quantity) AS AverageQuantityOrderedPerProduct
+FROM Order_Items
+GROUP BY product_id
+ORDER BY product_id;
+
+
+SELECT
+    order_id,
+    total_amount
+FROM Orders
+WHERE total_amount > (SELECT AVG(total_amount) FROM Orders)
+ORDER BY total_amount DESC; 
+
+
+SELECT
+    product_id,
+    SUM(quantity) AS TotalQuantitySold
+FROM Order_Items
+GROUP BY product_id
+ORDER BY TotalQuantitySold DESC;
